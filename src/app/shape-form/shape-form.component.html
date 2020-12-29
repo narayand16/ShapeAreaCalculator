@@ -1,0 +1,47 @@
+<p>shape-form works!</p>
+
+<div class="container d-flex justify-content-center" *ngIf="!selectedShape">
+    <form [formGroup]='shapeForm' (ngSubmit)="onShapeAdd()">
+        <label for="shapeName">Enter Name of the shape</label>
+        <input type="text" formControlName="shapeName">
+        <label for="dimensions">Enter dimensions</label>
+        <input type="text" name="dimensions" formControlName="dimensions">
+        <label for="areaFun">Enter Area Function</label>
+        <input type="text" name="areaFun" formControlName='areaFun'>
+        <input type="submit" value="Add Shape">
+    </form>
+</div>
+
+<div *ngIf="selectedShape">
+    <p>You have selected {{ selectedShape }}. Please input values for required variable(s)</p>
+    <form [formGroup]="dimesionsForm" [ngSwitch]="selectedShape" (ngSubmit)="saveDimensions(dimesionsForm.value)">
+        <!-- <label for=""></label> -->
+        <div *ngSwitchCase="'Circle'">
+            <label for="diameter">Enter value of diameter</label>
+            <input type="text" formControlName="diameter">
+        </div>
+        <div *ngSwitchCase="'Rectangle'">
+            <label for="length">Enter Length</label>
+            <input type="text" formControlName="width">
+            <label for="breadth">Enter Breadth</label>
+            <input type="text" formControlName="height">
+        </div>
+        <div *ngSwitchCase="'Sqaure'">
+            <label for="side">Enter Side</label>
+            <input type="text" formControlName="side">
+        </div>
+        <div *ngSwitchCase="'Eclipse'">
+            <label for="width">Enter Width</label>
+            <input type="text" formControlName="width">
+            <label for="width">Enter Height</label>
+            <input type="text" formControlName="height">
+        </div>
+        <div *ngSwitchDefault>
+            <label for="width">Enter Width</label>
+            <input type="text" formControlName="width">
+        </div>
+
+        <input type="submit" value="Next" [disabled]="dimesionsForm.invalid">
+        <input type="button" value="Cancel" (click)="goToShapeList()">
+    </form>
+</div>

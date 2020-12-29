@@ -1,0 +1,17 @@
+<p>shape-list works!</p>
+
+<div *ngIf="!isInputShow">
+    <ul>
+        <li *ngFor='let item of itemList'>
+            <input type="radio" name="itemName" value="{{ item.value }}" (change)='onItemSelected(item)'> {{ item.name
+            }}
+        </li>
+    </ul>
+</div>
+
+<div>
+    <button class="btn btn-primary" (click)="onClickNext()">Next</button>
+    <button class="btn btn-primary" (click)="cancel()">Cancel</button>
+</div>
+
+
