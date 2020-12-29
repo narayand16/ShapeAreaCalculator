@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
 
-  private dimensionsData$ = new Subject();
+  private dimensionsData$ = new BehaviorSubject<any>({});
+  dimensions= {};
 
-  getDimensionsData() {
+  getDimensionsData(): Observable<any> {
     return this.dimensionsData$.asObservable();
   }
 

@@ -46,15 +46,27 @@ export class ShapeFormComponent implements OnInit {
     //send dimensions
     console.log('dimenesions', dimensions);
     this.sharedService.setDimensionsData(dimensions);
-    this.router.navigate(['/area'], {
+    this.sharedService.dimensions = dimensions;
+    this.router.navigate(['/area'],
+    {
       queryParams: {
-        dimenesions: dimensions
+        selectedShape: this.selectedShape
       }
-    })
+    }
+    )
   }
 
   goToShapeList() {
     this.router.navigateByUrl('/list');
+  }
+
+  validateNumberInput(event) { // this function allows only comma separated number input
+    console.log(event);
+    const charCode = event.which ? event.which : event.keyCode;
+    if(charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 44) {
+      return false;
+    }
+    return true;
   }
 
 }

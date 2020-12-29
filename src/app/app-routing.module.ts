@@ -5,9 +5,10 @@ import { ShapeFormComponent } from './shape-form/shape-form.component';
 import { ShapeListComponent } from './shape-list/shape-list.component';
 
 const routes: Routes = [
-  { path: '', component: ShapeFormComponent },
+  { path: 'create', component: ShapeFormComponent },
   { path: 'list', component: ShapeListComponent },
-  { path: 'area', component: ShapeAreaComponent }
+  { path: 'area', component: ShapeAreaComponent },
+  { path: '', component: ShapeFormComponent }
 ];
 
 @NgModule({
