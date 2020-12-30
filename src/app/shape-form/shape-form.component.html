@@ -1,46 +1,69 @@
-<p>shape-form works!</p>
-
 <div class="container d-flex justify-content-center" *ngIf="!selectedShape">
-    <form [formGroup]='shapeForm' (ngSubmit)="onShapeAdd()">
-        <label for="shapeName" class="form-label">Enter Name of the shape</label>
-        <input type="text" class="form-control mb-3" formControlName="shapeName">
-        <label for="dimensions" class="form-label">Enter dimensions</label>
-        <input type="text" class="form-control mb-3" name="dimensions" (keypress)="validateNumberInput($event)" formControlName="dimensions">
-        <label for="areaFun" class="form-label">Enter Area Function</label>
-        <input type="text" class="form-control mb-3" name="areaFun" formControlName='areaFun'>
-        <input type="submit" class="btn btn-primary" value="Add Shape">
-    </form>
+    <div class="row">
+        <h3 class="text-center ml-3">Add Shape</h3>
+        <!-- </div> -->
+        <div class="col-12">
+            <form [formGroup]='shapeForm' class="shape-form-layout" (ngSubmit)="onShapeAdd(shapeForm.value)">
+                <label for="shapeName" class="form-label required">Enter Name of the shape<span
+                        class="text-danger">*</span></label>
+                <input type="text" class="form-control mb-3" formControlName="shapeName">
+                <label for="dimensions" class="form-label">Enter dimensions</label>
+                <input type="text" class="form-control mb-3" name="dimensions" (keypress)="validateNumberInput($event)"
+                    formControlName="dimensions">
+                <label for="areaFun" class="form-label">Enter Area Function</label>
+                <input type="text" class="form-control mb-3" name="areaFun" formControlName='areaFun'>
+                <div class="submit-btn-container">
+                    <input type="submit" [disabled]="!(shapeForm.valid && shapeForm.dirty)" class="btn btn-primary"
+                        value="Add Shape">
+                </div>
+            </form>
+        </div>
+
+    </div>
 </div>
-
 <div class="container d-flex justify-content-center" *ngIf="selectedShape">
-    <p>You have selected <span class="">{{ selectedShape }}</span>. Please input values for required variable(s)</p>
-    <form [formGroup]="dimesionsForm" [ngSwitch]="selectedShape" (ngSubmit)="saveDimensions(dimesionsForm.value)">
-        <div *ngSwitchCase="'Circle'">
-            <label for="diameter" class="form-label">Enter value of diameter</label>
-            <input type="text" class="form-control mb-3" formControlName="diameter">
-        </div>
-        <div *ngSwitchCase="'Rectangle'">
-            <label for="length" class="form-label">Enter Length</label>
-            <input type="text" class="form-control mb-3" formControlName="width">
-            <label for="breadth" class="form-label">Enter Breadth</label>
-            <input type="text" class="form-control mb-3" formControlName="height">
-        </div>
-        <div *ngSwitchCase="'Sqaure'">
-            <label for="side" class="form-label">Enter Side</label>
-            <input type="text" class="form-control mb-3" formControlName="side">
-        </div>
-        <div *ngSwitchCase="'Eclipse'">
-            <label for="width" class="form-label">Enter Width</label>
-            <input type="text" class="form-control mb-3" formControlName="width">
-            <label for="width" class="form-label">Enter Height</label>
-            <input type="text" class="form-control mb-3" formControlName="height">
-        </div>
-        <div *ngSwitchDefault>
-            <label for="width" class="form-label">Enter Width</label>
-            <input type="text" class="form-control mb-3" formControlName="width">
+    <div class="row">
+        <p>You have selected <span class="text-danger"><strong>{{ selectedShape }}</strong></span>. Please input values
+            for required
+            variable(s)</p>
+        <div class="col-10">
+            <form [formGroup]="dimensionsForm" [ngSwitch]="selectedShape"
+                (ngSubmit)="saveDimensions(dimensionsForm.value)">
+                <div *ngSwitchCase="'Circle'">
+                    <label for="diameter" class="form-label">Enter value of diameter</label>
+                    <input type="text" class="form-control mb-3" formControlName="diameter">
+                </div>
+                <div *ngSwitchCase="'Rectangle'">
+                    <label for="length" class="form-label">Enter Length</label>
+                    <input type="text" class="form-control mb-3" formControlName="width">
+                    <label for="breadth" class="form-label">Enter Breadth</label>
+                    <input type="text" class="form-control mb-3" formControlName="height">
+                </div>
+                <div *ngSwitchCase="'Sqaure'">
+                    <label for="side" class="form-label">Enter Side</label>
+                    <input type="text" class="form-control mb-3" formControlName="width">
+                </div>
+                <div *ngSwitchCase="'Eclipse'">
+                    <label for="width" class="form-label">Enter Width</label>
+                    <input type="text" class="form-control mb-3" formControlName="width">
+                    <label for="width" class="form-label">Enter Height</label>
+                    <input type="text" class="form-control mb-3" formControlName="height">
+                </div>
+                <div *ngSwitchDefault>
+                    <div *ngFor="let item of arr(noOfDimensions).fill(1); let i = index" formArrayName="dimensionArray">
+                        <label for="width" class="form-label">Enter Dimension {{ i + 1 }}</label>
+                        <input type="text" class="form-control mb-3" formControlName="{{i}}">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <input type="button" class="btn btn-light" value="Cancel" (click)="goToShapeList()">
+                    <input type="submit" class="btn btn-primary" value="Next" [disabled]="!dimensionsForm.dirty">
+                </div>
+
+            </form>
         </div>
 
-        <input type="submit" class="btn btn-primary" value="Next" [disabled]="dimesionsForm.invalid">
-        <input type="button" class="btn btn-primary" value="Cancel" (click)="goToShapeList()">
-    </form>
+    </div>
+
+
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from "../service/shared.service";
 @Component({
@@ -10,49 +10,54 @@ import { SharedService } from "../service/shared.service";
 export class ShapeFormComponent implements OnInit {
 
   shapeForm: FormGroup;
-  dimesionsForm: FormGroup;
+  dimensionsForm: FormGroup;
   selectedShape = '';
+  noOfDimensions = 0;
+  arr = Array; //Array type captured in a variable
+  arrayItems = [];
 
   constructor(private fb: FormBuilder, private router: Router,
     private activatedRoute: ActivatedRoute, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe((params) => {
-      this.selectedShape = params && params.selectedShape ? params.selectedShape : '';
-      this.dimesionsForm = this.fb.group({
-        width: [''],
-        height: [''],
-        diameter: [''],
-        side: ['']
-      });
-    });
     this.shapeForm = this.fb.group({
-      shapeName: '',
+      shapeName: ['', [Validators.required, Validators.minLength(3)]],
       dimensions: '',
       areaFun: ''
     });
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.selectedShape = params && params.selectedShape ? params.selectedShape : '';
+      this.noOfDimensions = params && params.noOfDimensions ? Number(params.noOfDimensions) : 0;
+      this.arrayItems = this.arr(this.noOfDimensions).fill("");
+      this.dimensionsForm = this.fb.group({
+        width: [''],
+        height: [''],
+        diameter: [''],
+        dimensionArray: this.fb.array([...this.arrayItems])
+      });
+    });
+
   }
 
-  onShapeAdd(): void {
-    console.log('insert', this.shapeForm.value);
+  onShapeAdd(shapeInfo): void {
+    this.noOfDimensions = shapeInfo.dimensions.split(',').length;
     this.router.navigate(['/list'], {
       queryParams: {
-        inputShape: this.shapeForm.controls.shapeName.value ? this.shapeForm.controls.shapeName.value : ''
+        inputShape: shapeInfo.shapeName ? shapeInfo.shapeName : '',
+        noOfDimensions: this.noOfDimensions
       }
     });
   }
 
-  saveDimensions(dimensions) {
-    //send dimensions
-    console.log('dimenesions', dimensions);
+  saveDimensions(dimensions) { //send dimensions
     this.sharedService.setDimensionsData(dimensions);
-    this.sharedService.dimensions = dimensions;
+    localStorage.setItem('dimensions', JSON.stringify(dimensions));
     this.router.navigate(['/area'],
-    {
-      queryParams: {
-        selectedShape: this.selectedShape
+      {
+        queryParams: {
+          selectedShape: this.selectedShape
+        }
       }
-    }
     )
   }
 
@@ -61,9 +66,8 @@ export class ShapeFormComponent implements OnInit {
   }
 
   validateNumberInput(event) { // this function allows only comma separated number input
-    console.log(event);
     const charCode = event.which ? event.which : event.keyCode;
-    if(charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 44) {
+    if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 44) {
       return false;
     }
     return true;

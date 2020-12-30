@@ -1,8 +1,14 @@
+<div class="container d-flex align-items-center">
+    <div class="row">
+        <div class="col-12">
+            <h4>
+                Your result
+            </h4>
+            <p>
+                The area of the <span>{{ selectedShape }}</span> is <span>{{ area }}</span>
+            </p>
+        
+            <button class="btn btn-primary" (click)="navigateToShapeForm()">Start Over</button>
+        </div>
 
-<div>
-    <p>
-
-        The area of the is {{ area }}
-    
-    </p>
 </div>
