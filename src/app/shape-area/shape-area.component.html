@@ -1,14 +1,16 @@
-<div class="container d-flex align-items-center">
-    <div class="row">
-        <div class="col-12">
-            <h4>
-                Your result
-            </h4>
-            <p>
-                The area of the <span>{{ selectedShape }}</span> is <span>{{ area }}</span>
-            </p>
-        
-            <button class="btn btn-primary" (click)="navigateToShapeForm()">Start Over</button>
-        </div>
+<div class="container">
+    <div class="text-center">
+        <h4>Step 3 - Your Result</h4>
+        <p>
+            You have calculated the area for <span>{{ selectedShape }}</span>. Below is the result
+        </p>
+    </div>
+    <div class="text-center m-5">
+        <h5>
+            The area is <span class="text-success">{{ area }}</span>            
+        </h5>
+        <p>(correct upto three decimal places)</p>
+        <button class="btn btn-primary m-3" (click)="navigateToShapeForm()">Start Over</button>
+    </div>
 
 </div>

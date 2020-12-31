@@ -1,69 +1,94 @@
 <div class="container d-flex justify-content-center" *ngIf="!selectedShape">
-    <div class="row">
-        <h3 class="text-center ml-3">Add Shape</h3>
-        <!-- </div> -->
-        <div class="col-12">
+    <div class="row justify-content-center">
+        <h4>Add Shape</h4>
+        <div class="col-12 d-flex justify-content-center">
             <form [formGroup]='shapeForm' class="shape-form-layout" (ngSubmit)="onShapeAdd(shapeForm.value)">
                 <label for="shapeName" class="form-label required">Enter Name of the shape<span
                         class="text-danger">*</span></label>
-                <input type="text" class="form-control mb-3" formControlName="shapeName">
-                <label for="dimensions" class="form-label">Enter dimensions</label>
-                <input type="text" class="form-control mb-3" name="dimensions" (keypress)="validateNumberInput($event)"
-                    formControlName="dimensions">
-                <label for="areaFun" class="form-label">Enter Area Function</label>
-                <input type="text" class="form-control mb-3" name="areaFun" formControlName='areaFun'>
+                <div class="mb-3">
+                    <input type="text" class="form-control" formControlName="shapeName">
+                    <div
+                        *ngIf="(shapeForm.get('shapeName').invalid && (shapeForm.get('shapeName').touched || shapeForm.get('shapeName').dirty))">
+                        <span class="text-danger" *ngIf='shapeForm.controls.shapeName.errors?.required'>Please enter
+                            valid name</span>
+                    </div>
+                    <!-- <div
+                        *ngIf="(shapeForm.get('shapeName').valid || (shapeForm.get('shapeName').touched || shapeForm.get('shapeName').dirty))">
+                        <span class="text-danger" *ngIf='shapeForm.controls.shapeName.value?.length < 3'>Name must
+                            contain minimum 3 characters</span>
+                    </div> -->
+                </div>
+                <div class="mb-3">
+                    <label for="dimensions" class="form-label">Enter dimensions</label>
+                    <input type="text" class="form-control" name="dimensions" (keypress)="allowNumber($event)"
+                        formControlName="dimensions">
+                </div>
+                <div class="mb-3">
+                    <label for="areaFun" class="form-label">Enter Area Function</label>
+                    <input type="text" class="form-control" name="areaFun" formControlName='areaFun'>
+                </div>
                 <div class="submit-btn-container">
                     <input type="submit" [disabled]="!(shapeForm.valid && shapeForm.dirty)" class="btn btn-primary"
                         value="Add Shape">
                 </div>
             </form>
         </div>
-
     </div>
 </div>
 <div class="container d-flex justify-content-center" *ngIf="selectedShape">
-    <div class="row">
-        <p>You have selected <span class="text-danger"><strong>{{ selectedShape }}</strong></span>. Please input values
+    <div>
+        <h4 class="text-center">Step 2 - Insert your values</h4>
+        <p class="text-center">You have selected <span class="text-danger"><strong>{{ selectedShape }}</strong></span>.
+            Please input values
             for required
             variable(s)</p>
-        <div class="col-10">
-            <form [formGroup]="dimensionsForm" [ngSwitch]="selectedShape"
+        <div class="d-flex justify-content-center">
+            <form [formGroup]="dimensionsForm" class="shape-form-layout" [ngSwitch]="selectedShape"
                 (ngSubmit)="saveDimensions(dimensionsForm.value)">
-                <div *ngSwitchCase="'Circle'">
-                    <label for="diameter" class="form-label">Enter value of diameter</label>
-                    <input type="text" class="form-control mb-3" formControlName="diameter">
+                <div *ngSwitchCase="'Circle'" class="mb-3">
+                    <label for="diameter" class="form-label">Diameter</label>
+                    <input type="text" class="form-control" (keypress)="allowNumber($event)" formControlName="diameter">
                 </div>
                 <div *ngSwitchCase="'Rectangle'">
-                    <label for="length" class="form-label">Enter Length</label>
-                    <input type="text" class="form-control mb-3" formControlName="width">
-                    <label for="breadth" class="form-label">Enter Breadth</label>
-                    <input type="text" class="form-control mb-3" formControlName="height">
+                    <div class="mb-3">
+                        <label for="length" class="form-label">Length</label>
+                        <input type="text" class="form-control" (keypress)="allowNumber($event)"
+                            formControlName="width">
+                    </div>
+                    <div class="mb-3">
+                        <label for="breadth" class="form-label">Breadth</label>
+                        <input type="text" class="form-control" (keypress)="allowNumber($event)"
+                            formControlName="height">
+                    </div>
                 </div>
-                <div *ngSwitchCase="'Sqaure'">
-                    <label for="side" class="form-label">Enter Side</label>
-                    <input type="text" class="form-control mb-3" formControlName="width">
+                <div *ngSwitchCase="'Square'" class="mb-3">
+                    <label for="width" class="form-label">Side</label>
+                    <input type="text" class="form-control" (keypress)="allowNumber($event)" formControlName="width">
                 </div>
                 <div *ngSwitchCase="'Eclipse'">
-                    <label for="width" class="form-label">Enter Width</label>
-                    <input type="text" class="form-control mb-3" formControlName="width">
-                    <label for="width" class="form-label">Enter Height</label>
-                    <input type="text" class="form-control mb-3" formControlName="height">
+                    <div class="mb-3">
+                        <label for="width" class="form-label">Width</label>
+                        <input type="text" class="form-control mb-3" (keypress)="allowNumber($event)"
+                            formControlName="width">
+                    </div>
+                    <div class="mb-3">
+                        <label for="width" class="form-label">Height</label>
+                        <input type="text" class="form-control mb-3" (keypress)="allowNumber($event)"
+                            formControlName="height">
+                    </div>
                 </div>
                 <div *ngSwitchDefault>
                     <div *ngFor="let item of arr(noOfDimensions).fill(1); let i = index" formArrayName="dimensionArray">
-                        <label for="width" class="form-label">Enter Dimension {{ i + 1 }}</label>
-                        <input type="text" class="form-control mb-3" formControlName="{{i}}">
+                        <label for="width" class="form-label">Dimension {{ i + 1 }}</label>
+                        <input type="text" class="form-control mb-3" (keypress)="allowNumber($event)"
+                            formControlName="{{i}}">
                     </div>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <input type="button" class="btn btn-light" value="Cancel" (click)="goToShapeList()">
+                    <input type="button" class="btn btn-light" value="Cancel" (click)="navigateToShapeCreate()">
                     <input type="submit" class="btn btn-primary" value="Next" [disabled]="!dimensionsForm.dirty">
                 </div>
-
             </form>
         </div>
-
     </div>
-
-
 </div>

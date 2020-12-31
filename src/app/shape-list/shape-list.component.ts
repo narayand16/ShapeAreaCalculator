@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShapeType } from '../models/shape-type.model';
 import { shapes } from "../mock-shapes-data";
+import { SharedService } from '../service/shared.service';
 @Component({
   selector: 'app-shape-list',
   templateUrl: './shape-list.component.html',
@@ -13,17 +14,17 @@ export class ShapeListComponent implements OnInit {
   selectedShape = '';
   noOfDimensions = 0;
   isPolygon = false;
-  itemListUpdated: ShapeType[];
   tempShape: string;
+  isRadioBtnSelected = false;
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private service: SharedService) { }
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {
-      if (params) {
+      if (params && Object.keys(params).length !== 0) {
         this.tempShape = params.inputShape ? params.inputShape : '';
         this.itemList = this.removeDuplicateShape(this.tempShape);
-        this.itemList.push({ name: params.inputShape, value: '5' });
+        this.tempShape ? this.itemList.push({ name: this.tempShape, value: '5' }) : this.itemList;
         this.noOfDimensions = params.noOfDimensions ? params.noOfDimensions : 0
       }
     });
@@ -36,6 +37,7 @@ export class ShapeListComponent implements OnInit {
   onItemSelected(item): void {
     this.isPolygon = item.value == '5' ? true : false;
     this.selectedShape = item.name;
+    this.isRadioBtnSelected = true;
   }
 
   onClickNext() {

@@ -49,7 +49,7 @@ export class ShapeFormComponent implements OnInit {
     });
   }
 
-  saveDimensions(dimensions) { //send dimensions
+  saveDimensions(dimensions) { //share dimensions values
     this.sharedService.setDimensionsData(dimensions);
     localStorage.setItem('dimensions', JSON.stringify(dimensions));
     this.router.navigate(['/area'],
@@ -61,16 +61,12 @@ export class ShapeFormComponent implements OnInit {
     )
   }
 
-  goToShapeList() {
-    this.router.navigateByUrl('/list');
+  navigateToShapeCreate() {
+    this.router.navigate(['/create']);
   }
 
-  validateNumberInput(event) { // this function allows only comma separated number input
-    const charCode = event.which ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 44) {
-      return false;
-    }
-    return true;
+  allowNumber(event) {
+    return this.sharedService.validateNumberInput(event);
   }
 
 }

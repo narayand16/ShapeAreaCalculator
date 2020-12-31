@@ -1,13 +1,11 @@
 <div class="container d-flex justify-content-center">
-    <!-- <div class="m-auto text-center w-3">
-        <h4 class="">Step 1 - Select your shape</h4>
-    </div> -->
-    <div class="row">
-        <h4 class="">Step 1 - Select your shape</h4>
-        <div class="col-12">
+    <div>
+        <h4>Step 1 - Select your shape</h4>
+        <div>
             <ul class="list-group">
                 <li class="list-group-item radio-bg" *ngFor='let item of itemList'>
-                    <input type="radio" name="itemName" value="{{ item.value }}" (change)='onItemSelected(item)'> {{
+                    <input type="radio" name="itemName" [checked]="" value="{{ item.value }}"
+                        (change)='onItemSelected(item)'> {{
                     item.name
                     }}
                 </li>
@@ -18,5 +16,5 @@
 
 <div class='button-container'>
     <button class="btn btn-light ml-auto mr-4" (click)="cancel()">Cancel</button>
-    <button class="btn btn-primary  mr-3" (click)="onClickNext()">Next</button>
+    <button class="btn btn-primary  mr-3" [disabled]="!isRadioBtnSelected" (click)="onClickNext()">Next</button>
 </div>
